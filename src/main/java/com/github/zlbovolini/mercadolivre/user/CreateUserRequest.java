@@ -1,6 +1,7 @@
 package com.github.zlbovolini.mercadolivre.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.github.zlbovolini.mercadolivre.validation.constraint.Unique;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ class CreateUserRequest {
 
     @NotBlank
     @Email
+    @Unique(entity = User.class, field = "email")
     private final String email;
 
     /**
