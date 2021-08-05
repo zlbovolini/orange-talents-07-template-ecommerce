@@ -6,11 +6,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-class Password {
+public class Password {
 
     private final String hashedPassword;
 
-    private Password(String plainPassword, PasswordEncoder passwordEncoder) {
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private Password(String plainPassword) {
         this.hashedPassword = passwordEncoder.encode(plainPassword);
     }
 
@@ -20,9 +22,11 @@ class Password {
      * @return Objeto que representa uma senha criptografada.
      */
     static Password encode(@NotBlank @Size(min = 6) String plainPassword) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return new Password(plainPassword);
+    }
 
-        return new Password(plainPassword, passwordEncoder);
+    public static PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
     }
 
     /**

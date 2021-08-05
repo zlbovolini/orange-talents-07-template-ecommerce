@@ -1,16 +1,20 @@
 package com.github.zlbovolini.mercadolivre.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.github.zlbovolini.mercadolivre.security.DefaultAccessProfile;
+import com.github.zlbovolini.mercadolivre.security.UserCredentials;
+import org.springframework.security.core.GrantedAuthority;
+
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-class User {
+public class User implements UserCredentials {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +36,34 @@ class User {
     @NotNull
     private Instant createdAt = Instant.now();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<DefaultAccessProfile> accessProfiles = new ArrayList<>();
+
     @Deprecated
     User() {}
 
     User(String email, Password password) {
         this.email = email;
         this.hashedPassword = password.getHashedPassword();
+    }
+
+    Long getId() {
+        return id;
+    }
+
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return accessProfiles;
     }
 }
