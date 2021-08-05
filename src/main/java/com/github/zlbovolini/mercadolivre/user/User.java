@@ -32,6 +32,7 @@ class User {
     @NotNull
     private Instant createdAt = Instant.now();
 
+    @Deprecated
     User() {}
 
     User(String email, Password password) {

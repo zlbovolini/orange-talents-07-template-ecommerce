@@ -20,6 +20,7 @@ class Category {
     @ManyToOne(optional = true)
     private Category superCategory;
 
+    @Deprecated
     Category() {}
 
     Category(String name) {
