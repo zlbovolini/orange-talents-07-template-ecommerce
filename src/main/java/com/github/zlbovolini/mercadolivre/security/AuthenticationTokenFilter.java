@@ -1,6 +1,7 @@
 package com.github.zlbovolini.mercadolivre.security;
 
 import com.github.zlbovolini.mercadolivre.authentication.TokenService;
+import com.github.zlbovolini.mercadolivre.user.AuthenticatedUser;
 import com.github.zlbovolini.mercadolivre.user.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +41,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         Long id = tokenService.getUserId(token);
         userRepository.findById(id)
                 .ifPresent(user -> {
-                    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(new AuthenticatedUser(user), null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(credentials);
                 });
     }
