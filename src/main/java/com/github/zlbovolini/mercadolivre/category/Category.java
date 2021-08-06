@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-class Category {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
