@@ -2,24 +2,19 @@ package com.github.zlbovolini.mercadolivre.product;
 
 import com.github.zlbovolini.mercadolivre.user.AuthenticatedUser;
 import com.github.zlbovolini.mercadolivre.user.User;
-import com.github.zlbovolini.mercadolivre.validation.constraint.NotEmptyElement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping("/api/v1/products")
 public class PersistProductController {
@@ -49,12 +44,12 @@ public class PersistProductController {
     @Transactional
     @PostMapping("/{id}/images")
     public ResponseEntity<Void> addProductImage(@Valid Identifier identifier,
-                                                @Valid @Size(min = 1) @NotEmptyElement List<MultipartFile> images,
+                                                @Valid CreateProductImagesRequest images,
                                                 @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
 
         Long ownerId = authenticatedUser.getId();
 
-        List<Resource> resources = storageService.upload(ownerId, images);
+        List<Resource> resources = storageService.upload(ownerId, images.getImages());
 
         Product product = entityManager.find(Product.class, identifier.getId());
         product.addProductImages(resources);

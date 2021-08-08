@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, BindException.class })
-    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(BindException e) {
 
         List<ObjectError> globalErrors = e.getBindingResult().getGlobalErrors();
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
