@@ -1,6 +1,7 @@
 package com.github.zlbovolini.mercadolivre.exception;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import java.util.List;
 
 @RestControllerAdvice
@@ -43,7 +46,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    private String getErrorMessage(ObjectError error) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleConstraintViolation(ConstraintViolationException e) {
+
+        ApiErrorResponse errorResponse = new ApiErrorResponse();
+
+        e.getConstraintViolations().forEach(violation -> {
+
+            String field = "";
+            for(Path.Node node : violation.getPropertyPath()) {
+                field = node.getName();
+            }
+
+            // !todo Corrigir resolução da mensagem de erro
+            errorResponse.addFieldError(new FieldErrorInfo(field, violation.getMessage()));
+        });
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    private String getErrorMessage(MessageSourceResolvable error) {
         return messageSource.getMessage(error, LocaleContextHolder.getLocale());
     }
 }

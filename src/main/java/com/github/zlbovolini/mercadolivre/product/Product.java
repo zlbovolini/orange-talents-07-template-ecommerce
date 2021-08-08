@@ -7,9 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -48,6 +46,10 @@ class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.PERSIST)
     private Set<ProductCharacteristic> characteristics;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
+    private List<ProductImage> images = new ArrayList<>();
+
+    @Deprecated
     Product() {}
 
     Product(String name, BigDecimal price, Long quantity, String description, User owner, Category category, Collection<CreateProductCharacteristicRequest> characteristics) {
@@ -60,6 +62,12 @@ class Product {
         this.characteristics = characteristics.stream()
                 .map(characteristic -> characteristic.toModel(this))
                 .collect(Collectors.toSet());
+    }
+
+    void addProductImages(@NotNull @Size(min = 1) List<Resource> images) {
+        this.images.addAll(images.stream()
+                .map(image -> new ProductImage(image, this))
+                .collect(Collectors.toList()));
     }
 
     @Override
