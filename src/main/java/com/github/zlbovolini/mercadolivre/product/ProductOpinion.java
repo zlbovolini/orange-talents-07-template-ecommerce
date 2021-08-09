@@ -15,7 +15,7 @@ public class ProductOpinion {
     @NotNull
     @Min(1)
     @Max(5)
-    private Integer note;
+    private Integer rate;
 
     @NotBlank
     private String title;
@@ -35,8 +35,8 @@ public class ProductOpinion {
     @Deprecated
     ProductOpinion() {}
 
-    ProductOpinion(Integer note, String title, String description, Product product, User user) {
-        this.note = note;
+    ProductOpinion(Integer rate, String title, String description, Product product, User user) {
+        this.rate = rate;
         this.title = title;
         this.description = description;
         this.product = product;
@@ -48,7 +48,7 @@ public class ProductOpinion {
     }
 
     public Integer getRate() {
-        return note;
+        return rate;
     }
 
     public String getTitle() {
