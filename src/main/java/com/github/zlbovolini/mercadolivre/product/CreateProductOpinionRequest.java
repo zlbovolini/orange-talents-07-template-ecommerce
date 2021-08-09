@@ -1,6 +1,5 @@
-package com.github.zlbovolini.mercadolivre.product.opinion;
+package com.github.zlbovolini.mercadolivre.product;
 
-import com.github.zlbovolini.mercadolivre.product.Product;
 import com.github.zlbovolini.mercadolivre.user.User;
 
 import javax.validation.constraints.*;

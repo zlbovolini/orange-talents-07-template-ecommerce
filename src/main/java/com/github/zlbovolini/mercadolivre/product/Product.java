@@ -1,8 +1,6 @@
 package com.github.zlbovolini.mercadolivre.product;
 
 import com.github.zlbovolini.mercadolivre.category.Category;
-import com.github.zlbovolini.mercadolivre.product.opinion.CreateProductOpinionRequest;
-import com.github.zlbovolini.mercadolivre.product.opinion.ProductOpinion;
 import com.github.zlbovolini.mercadolivre.user.User;
 
 import javax.persistence.*;
