@@ -1,6 +1,8 @@
 package com.github.zlbovolini.mercadolivre.product;
 
 import com.github.zlbovolini.mercadolivre.category.Category;
+import com.github.zlbovolini.mercadolivre.product.opinion.CreateProductOpinionRequest;
+import com.github.zlbovolini.mercadolivre.product.opinion.ProductOpinion;
 import com.github.zlbovolini.mercadolivre.user.User;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
+public
 class Product {
 
     @Id
@@ -49,6 +52,9 @@ class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
     private List<ProductImage> images = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
+    private List<ProductOpinion> opinions = new ArrayList<>();
+
     @Deprecated
     Product() {}
 
@@ -68,6 +74,10 @@ class Product {
         this.images.addAll(images.stream()
                 .map(image -> new ProductImage(image, this))
                 .collect(Collectors.toList()));
+    }
+
+    public void addOpinion(CreateProductOpinionRequest opinion, User user) {
+        this.opinions.add(opinion.toModel(this, user));
     }
 
     @Override
