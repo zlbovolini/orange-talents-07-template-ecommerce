@@ -1,5 +1,7 @@
 package com.github.zlbovolini.mercadolivre.product;
 
+import com.github.zlbovolini.mercadolivre.addproductquestion.CreateProductQuestionRequest;
+import com.github.zlbovolini.mercadolivre.addproductquestion.ProductQuestion;
 import com.github.zlbovolini.mercadolivre.category.Category;
 import com.github.zlbovolini.mercadolivre.user.User;
 
@@ -53,6 +55,9 @@ class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
     private List<ProductOpinion> opinions = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
+    private List<ProductQuestion> questions = new ArrayList<>();
+
     @Deprecated
     Product() {}
 
@@ -68,6 +73,14 @@ class Product {
                 .collect(Collectors.toSet());
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getOwnerEmail() {
+        return owner.getEmail();
+    }
+
     void addProductImages(@NotNull @Size(min = 1) List<Resource> images) {
         this.images.addAll(images.stream()
                 .map(image -> new ProductImage(image, this))
@@ -76,6 +89,10 @@ class Product {
 
     public void addOpinion(CreateProductOpinionRequest opinion, User user) {
         this.opinions.add(opinion.toModel(this, user));
+    }
+
+    public void addQuestion(CreateProductQuestionRequest question, User user) {
+        this.questions.add(question.toModel(this, user));
     }
 
     @Override

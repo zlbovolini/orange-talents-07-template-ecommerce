@@ -51,6 +51,9 @@ public class User implements UserCredentials {
         return id;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public String getUsername() {
