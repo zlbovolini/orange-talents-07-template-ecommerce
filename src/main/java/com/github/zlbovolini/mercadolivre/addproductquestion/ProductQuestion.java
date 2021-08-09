@@ -36,4 +36,20 @@ public class ProductQuestion {
         this.product = product;
         this.user = user;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

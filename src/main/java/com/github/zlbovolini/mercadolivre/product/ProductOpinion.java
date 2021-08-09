@@ -42,4 +42,24 @@ public class ProductOpinion {
         this.product = product;
         this.user = user;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getRate() {
+        return note;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

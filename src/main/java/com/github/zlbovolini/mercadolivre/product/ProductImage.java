@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 
 @Entity
-class ProductImage {
+public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +50,9 @@ class ProductImage {
         this.type = resource.getType();
         this.size = resource.getSize();
         this.product = product;
+    }
+
+    public String getUri() {
+        return uri;
     }
 }

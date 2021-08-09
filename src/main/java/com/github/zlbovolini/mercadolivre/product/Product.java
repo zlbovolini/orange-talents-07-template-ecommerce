@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -73,12 +74,36 @@ class Product {
                 .collect(Collectors.toSet());
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
     public String getOwnerEmail() {
         return owner.getEmail();
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     void addProductImages(@NotNull @Size(min = 1) List<Resource> images) {
@@ -93,6 +118,30 @@ class Product {
 
     public void addQuestion(CreateProductQuestionRequest question, User user) {
         this.questions.add(question.toModel(this, user));
+    }
+
+    public <T> Set<T> mapCharacteristics(Function<ProductCharacteristic, T> mapper) {
+        return this.characteristics.stream()
+                .map(mapper)
+                .collect(Collectors.toSet());
+    }
+
+    public <T> List<T> mapImages(Function<ProductImage, T> mapper) {
+        return this.images.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
+    }
+
+    public <T> List<T> mapOpinions(Function<ProductOpinion, T> mapper) {
+        return this.opinions.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
+    }
+
+    public <T> List<T> mapQuestions(Function<ProductQuestion, T> mapper) {
+        return this.questions.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
     }
 
     @Override

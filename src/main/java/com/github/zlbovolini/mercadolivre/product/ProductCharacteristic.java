@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-class ProductCharacteristic {
+public class ProductCharacteristic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +22,25 @@ class ProductCharacteristic {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Product product;
 
+    @Deprecated
+    ProductCharacteristic() {}
+
     ProductCharacteristic(String name, String description, Product product) {
         this.name = name;
         this.description = description;
         this.product = product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override
