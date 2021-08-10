@@ -3,7 +3,10 @@ package com.github.zlbovolini.mercadolivre.product;
 import com.github.zlbovolini.mercadolivre.addproductquestion.CreateProductQuestionRequest;
 import com.github.zlbovolini.mercadolivre.addproductquestion.ProductQuestion;
 import com.github.zlbovolini.mercadolivre.category.Category;
+import com.github.zlbovolini.mercadolivre.purchase.CreatePurchaseRequest;
+import com.github.zlbovolini.mercadolivre.purchase.Purchase;
 import com.github.zlbovolini.mercadolivre.user.User;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -58,6 +61,9 @@ class Product {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
     private List<ProductQuestion> questions = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.MERGE)
+    private List<Purchase> purchases = new ArrayList<>();
 
     @Deprecated
     Product() {}
@@ -120,6 +126,10 @@ class Product {
         this.questions.add(question.toModel(this, user));
     }
 
+    public void addPurchase(CreatePurchaseRequest purchase, User user) {
+        this.purchases.add(purchase.toModel(this, user));
+    }
+
     public <T> Set<T> mapCharacteristics(Function<ProductCharacteristic, T> mapper) {
         return this.characteristics.stream()
                 .map(mapper)
@@ -142,6 +152,20 @@ class Product {
         return this.questions.stream()
                 .map(mapper)
                 .collect(Collectors.toList());
+    }
+
+
+    public boolean buy(@NotNull @Positive Integer quantity) {
+
+        Assert.isTrue(quantity > 0, "A quantidade de produtos comprados deve ser maior que zero");
+
+        if (this.quantity < quantity) {
+            return false;
+        }
+
+        this.quantity -= quantity;
+
+        return true;
     }
 
     @Override
